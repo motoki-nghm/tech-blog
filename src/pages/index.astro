@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+// トップの最初の着地点は「事例」(企画書 7節)。事例タグの記事を実績導線として上に出す。
+const caseStudies = posts.filter((p) => p.data.tags.includes("事例")).slice(0, 3);
+const latest = posts.slice(0, 5);
+---
+
+<BaseLayout>
+  <!-- ヒーロー: 何ができる人かを一言で(コピーはデザイン/企画で磨く) -->
+  <section class="hero">
+    <h1>AIを活用したアプリを、実際に作って課題を解決します。</h1>
+    <p class="muted">
+      開発した AI アプリの事例と、その裏側の判断を公開しています。
+      「この人に頼めそうか」を、実績で判断いただくためのサイトです。
+    </p>
+    <p>
+      <a class="cta" href="/blog">実績・記事を見る</a>
+    </p>
+  </section>
+
+  <!-- 実績/事例への導線(営業先の最初の着地点) -->
+  <section class="block">
+    <h2>実績・事例</h2>
+    {
+      caseStudies.length > 0 ? (
+        caseStudies.map((post) => <PostCard post={post} />)
+      ) : (
+        <p class="muted">
+          事例記事はこれから公開します(タグ「事例」で束ねる予定)。
+        </p>
+      )
+    }
+    <p><a href="/tags/事例">事例をすべて見る →</a></p>
+  </section>
+
+  <!-- 新着記事 -->
+  <section class="block">
+    <h2>新着記事</h2>
+    {
+      latest.length > 0 ? (
+        latest.map((post) => <PostCard post={post} />)
+      ) : (
+        <p class="muted">記事はまだありません。</p>
+      )
+    }
+    <p><a href="/blog">記事一覧へ →</a></p>
+  </section>
+
+  <!-- プロフィール(骨格。本文は G-3 の固定ページ化と合わせて詰める) -->
+  <section id="profile" class="block">
+    <h2>プロフィール</h2>
+    <p class="muted">
+      AI を活用したアプリ開発を行うフリーランス(プロフィール本文は準備中)。
+      できること・実績のハブとして整備予定です。
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 1rem 0 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+  .block {
+    margin-top: 2.5rem;
+  }
+  .block > h2 {
+    margin-bottom: 0.5rem;
+  }
+</style>

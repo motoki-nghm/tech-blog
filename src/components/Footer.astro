@@ -1,0 +1,46 @@
+---
+// フッターにもプロフィール・問い合わせ導線を置く(営業導線は全ページで確保する)。
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <!-- 問い合わせ導線プレースホルダ。連絡先が確定したら差し替える。 -->
+  <section id="contact" class="contact">
+    <h2>お問い合わせ</h2>
+    <p class="muted">
+      お仕事のご相談はこちら(連絡手段は準備中 —
+      メール / フォーム / SNS のいずれかを設置予定)。
+    </p>
+  </section>
+
+  <nav class="footer-nav">
+    <a href="/#profile">プロフィール</a>
+    <a href="/blog">記事一覧</a>
+    <a href="/tags">タグ</a>
+  </nav>
+
+  <p class="muted copyright">&copy; {year}</p>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: 2rem 1rem;
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+  .contact h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0 0.5rem;
+    font-size: 0.95rem;
+  }
+  .copyright {
+    font-size: 0.85rem;
+  }
+</style>

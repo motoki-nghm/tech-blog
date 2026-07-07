@@ -1,0 +1,76 @@
+---
+// 記事詳細の表示ガワ。frontmatter を受け取り、本文は <slot /> に流し込む。
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <p class="muted dates">
+        <FormattedDate date={pubDate} />
+        {
+          updatedDate && (
+            <span>(更新: <FormattedDate date={updatedDate} />)</span>
+          )
+        }
+      </p>
+      {
+        tags.length > 0 && (
+          <ul class="tag-list">
+            {tags.map((tag) => (
+              <li>
+                <a class="tag" href={`/tags/${tag}`}>
+                  {tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="post-body">
+      <slot />
+    </div>
+
+    <!-- 記事末の営業導線(企画書 7節: 記事 → プロフィール/問い合わせ) -->
+    <aside class="post-cta">
+      <p>
+        この開発の進め方や、お仕事のご相談は
+        <a href="/#profile">プロフィール</a> /
+        <a href="/#contact">お問い合わせ</a> から。
+      </p>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    margin-bottom: 2rem;
+  }
+  .dates {
+    font-size: 0.9rem;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+  }
+  .post-cta {
+    margin-top: 3rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: #fafafa;
+  }
+</style>
