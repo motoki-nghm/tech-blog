@@ -12,7 +12,7 @@
 | 記事フォーマット | MDX(コンテンツコレクション) |
 | 言語 | TypeScript |
 | コンテンツ管理 | Gitベース(外部CMSなし) |
-| ホスティング(予定) | Cloudflare Pages / Vercel |
+| ホスティング | Vercel(静的出力) |
 
 外部ヘッドレスCMSではなくGitベースを選んだのは、記事も設定もすべてリポジトリで完結し、AIエージェントと会話しながらそのまま執筆・レビューできるためです。
 
@@ -55,3 +55,14 @@ docs/planning/    企画書・記事バックログ(クラピカ)
 docs/design/      デザインシステム(ヒソカ)
 src/content/blog/ 記事本体(MDX)
 ```
+
+## デプロイ(Vercel)
+
+静的サイト(SSG)なので Vercel のゼロコンフィグで動く。専用アダプタは入れていない。
+
+1. Vercel でこのリポジトリを Import して連携する
+2. **Framework Preset: `Astro`** を選ぶ(ビルドコマンド `astro build`・出力ディレクトリ `dist` は自動で入る。変更不要)
+3. Deploy する
+4. 公開URL確定後、`astro.config.mjs` の `site` をダミー(`https://example.com`)から本番URLへ差し替える(OGP・canonical URL に使用)
+
+> 実際の Import・連携作業は Vercel ダッシュボード側で行う。リポジトリ側の準備は上記で完了している。
