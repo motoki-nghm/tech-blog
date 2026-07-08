@@ -1,0 +1,128 @@
+---
+// 記事詳細の表示ガワ。frontmatter を受け取り、本文は <slot /> に流し込む。
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <p class="muted dates">
+        <FormattedDate date={pubDate} />
+        {
+          updatedDate && (
+            <span>(更新: <FormattedDate date={updatedDate} />)</span>
+          )
+        }
+      </p>
+      {
+        tags.length > 0 && (
+          <ul class="tag-list">
+            {tags.map((tag) => (
+              <li>
+                <a class="tag" href={`/tags/${tag}`}>
+                  {tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="post-body">
+      <slot />
+    </div>
+
+    <!-- 記事末の営業導線(企画書 7節: 記事 → プロフィール/問い合わせ) -->
+    <aside class="post-cta">
+      <p>
+        この開発の進め方や、お仕事のご相談は
+        <a href="/#profile">プロフィール</a> /
+        <a href="/#contact">お問い合わせ</a> から。
+      </p>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .dates {
+    font-size: 0.9rem;
+    margin-top: var(--space-xs);
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-md) 0 0;
+  }
+
+  /* 本文の読み心地 */
+  .post-body :global(h2) {
+    margin-top: var(--space-xl);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .post-body :global(h3) {
+    margin-top: var(--space-lg);
+  }
+  .post-body :global(p),
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    margin-block: var(--space-md);
+  }
+  .post-body :global(a) {
+    text-decoration: underline;
+  }
+  .post-body :global(blockquote) {
+    margin: var(--space-md) 0;
+    padding: var(--space-xs) var(--space-md);
+    border-left: 3px solid
+      color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+    color: var(--color-muted);
+  }
+  .post-body :global(code) {
+    font-size: 0.9em;
+    padding: 0.1em 0.35em;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-subtle);
+  }
+  .post-body :global(pre) {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+  .post-body :global(pre code) {
+    padding: 0;
+    background: none;
+  }
+  .post-body :global(img) {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+  }
+
+  .post-cta {
+    margin-top: var(--space-xl);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-subtle);
+  }
+  .post-cta p {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+// 記事一覧で使うカード。トップ・記事一覧・タグ別で共用する。
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags } = post.data;
+---
+
+<article class="card">
+  <h3><a href={`/blog/${post.id}`}>{title}</a></h3>
+  <p class="muted date"><FormattedDate date={pubDate} /></p>
+  <p class="desc">{description}</p>
+  {
+    tags.length > 0 && (
+      <ul class="tag-list">
+        {tags.map((tag) => (
+          <li>
+            <a class="tag" href={`/tags/${tag}`}>
+              {tag}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition:
+      border-color 0.18s ease,
+      transform 0.18s ease;
+  }
+  .card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+    transform: translateY(-2px);
+  }
+  .card h3 {
+    margin: 0 0 var(--space-xs);
+  }
+  .card h3 a {
+    color: var(--color-heading);
+    text-decoration: none;
+  }
+  .card:hover h3 a {
+    color: var(--color-accent);
+  }
+  .date {
+    font-size: 0.85rem;
+    margin: 0 0 var(--space-xs);
+  }
+  .desc {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-text);
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      transition: none;
+    }
+    .card:hover {
+      transform: none;
+    }
+  }
+</style>

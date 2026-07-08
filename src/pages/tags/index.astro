@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CORE_TAGS } from "../../consts";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+// タグごとの記事数を集計。
+const counts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+
+// コア軸のタグを先頭に、その後は記事数の多い順で並べる。
+const tags = [...counts.keys()].sort((a, b) => {
+  const ai = CORE_TAGS.indexOf(a as (typeof CORE_TAGS)[number]);
+  const bi = CORE_TAGS.indexOf(b as (typeof CORE_TAGS)[number]);
+  if (ai !== -1 || bi !== -1) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  return (counts.get(b) ?? 0) - (counts.get(a) ?? 0);
+});
+---
+
+<BaseLayout title="タグ">
+  <h1>タグ</h1>
+  <p class="muted">
+    記事は「事例」「AI協働」「技術解説」の軸と、アプリ名タグで分類しています。
+  </p>
+  {
+    tags.length > 0 ? (
+      <ul class="tag-list">
+        {tags.map((tag) => (
+          <li>
+            <a class="tag" href={`/tags/${tag}`}>
+              {tag} ({counts.get(tag)})
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">タグ付きの記事はまだありません。</p>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+  }
+</style>
