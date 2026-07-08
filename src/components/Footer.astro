@@ -25,20 +25,28 @@ const year = new Date().getFullYear();
 <style>
   .site-footer {
     border-top: 1px solid var(--color-border);
-    padding: 2rem 1rem;
+    padding: var(--space-xl) var(--space-sm) var(--space-lg);
+    margin-top: var(--space-xl);
     max-width: var(--content-width);
     margin-inline: auto;
   }
   .contact h2 {
     font-size: 1.1rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: var(--space-xs);
   }
   .footer-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin: 1.5rem 0 0.5rem;
+    gap: var(--space-md);
+    margin: var(--space-md) 0 var(--space-xs);
     font-size: 0.95rem;
+  }
+  .footer-nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .footer-nav a:hover {
+    color: var(--color-accent);
   }
   .copyright {
     font-size: 0.85rem;

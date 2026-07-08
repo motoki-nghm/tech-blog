@@ -19,21 +19,32 @@ import { SITE_TITLE, NAV_LINKS } from "../consts";
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.5rem 1rem;
+    gap: var(--space-xs) var(--space-md);
     max-width: var(--content-width);
     margin-inline: auto;
-    padding: 1rem;
+    padding: var(--space-md) var(--space-sm);
     border-bottom: 1px solid var(--color-border);
   }
   .site-title {
     font-weight: 700;
+    letter-spacing: -0.01em;
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--color-heading);
+  }
+  .site-title:hover {
+    color: var(--color-accent);
   }
   nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.9rem;
+    gap: var(--space-md);
     font-size: 0.95rem;
+  }
+  nav a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--color-accent);
   }
 </style>
